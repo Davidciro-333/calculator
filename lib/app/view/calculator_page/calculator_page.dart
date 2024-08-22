@@ -1,9 +1,11 @@
 import 'dart:ui';
+import 'package:calculator/app/logic_operational/calculator_model.dart';
 import 'package:calculator/app/utils/colors.dart';
 import 'package:calculator/app/view/components/button_operation.dart';
 import 'package:calculator/app/view/components/title.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CalculatorPage extends StatelessWidget {
   const CalculatorPage({super.key});
@@ -76,6 +78,8 @@ class ResultArea extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final calculator = Provider.of<CalculatorModel>(context);
+
     return Expanded(
       child: Container(
           width: double.maxFinite,
@@ -86,11 +90,11 @@ class ResultArea extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                const Row(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Text('2 + 2',
-                        style: TextStyle(
+                    Text(calculator.display,
+                        style: const TextStyle(
                             fontSize: 24, fontWeight: FontWeight.w600)),
                   ],
                 ),
@@ -104,8 +108,8 @@ class ResultArea extends StatelessWidget {
                           Icons.dark_mode,
                           color: textColor,
                         )),
-                    const Text('= 4',
-                        style: TextStyle(
+                    Text(calculator.display,
+                        style: const TextStyle(
                             fontSize: 40, fontWeight: FontWeight.w600)),
                   ],
                 ),
@@ -156,72 +160,26 @@ class OperationArea extends StatelessWidget {
   }
 }
 
-class LineFive extends StatelessWidget {
-  const LineFive({
+class LineOne extends StatelessWidget {
+  const LineOne({
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
-    return const Row(
+    final calculator = Provider.of<CalculatorModel>(context);
+
+    return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        ButtonOperation(showIcon: true, icon: Icons.history, text: '1'),
-        Padding(padding: EdgeInsets.only(right: 0)),
-        ButtonOperation(showIcon: false, icon: Icons.clear, text: '0'),
-        Padding(padding: EdgeInsets.only(right: 0)),
-        ButtonOperation(showIcon: false, icon: Icons.clear, text: '.'),
-        Padding(padding: EdgeInsets.only(right: 0)),
-        ButtonOperation(
-          showIcon: false,
-          icon: CupertinoIcons.equal,
-          text: '=',
-          backColor: Colors.green,
-        ),
-      ],
-    );
-  }
-}
-
-class LineFour extends StatelessWidget {
-  const LineFour({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return const Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        ButtonOperation(showIcon: false, icon: Icons.clear, text: '1'),
-        Padding(padding: EdgeInsets.only(right: 0)),
-        ButtonOperation(showIcon: false, icon: Icons.clear, text: '2'),
-        Padding(padding: EdgeInsets.only(right: 0)),
-        ButtonOperation(showIcon: false, icon: Icons.clear, text: '3'),
-        Padding(padding: EdgeInsets.only(right: 0)),
-        ButtonOperation(showIcon: true, icon: Icons.add, text: '+'),
-      ],
-    );
-  }
-}
-
-class LineThree extends StatelessWidget {
-  const LineThree({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return const Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        ButtonOperation(showIcon: false, icon: Icons.clear, text: '4'),
-        Padding(padding: EdgeInsets.only(right: 0)),
-        ButtonOperation(showIcon: false, icon: Icons.clear, text: '5'),
-        Padding(padding: EdgeInsets.only(right: 0)),
-        ButtonOperation(showIcon: false, icon: Icons.clear, text: '6'),
-        Padding(padding: EdgeInsets.only(right: 0)),
-        ButtonOperation(showIcon: false, icon: Icons.minimize_rounded, text: '-'),
+        ButtonOperation(onPressed: () => calculator.clear(),showIcon: false, icon: Icons.clear, text: 'AC'),
+        const Padding(padding: EdgeInsets.only(right: 0)),
+        ButtonOperation(onPressed: () => calculator.backspace(),
+            showIcon: true, icon: Icons.backspace_rounded, text: ''),
+        const Padding(padding: EdgeInsets.only(right: 0)),
+        const ButtonOperation(showIcon: true, icon: Icons.percent, text: ''),
+        const Padding(padding: EdgeInsets.only(right: 0)),
+        ButtonOperation(onPressed: () => calculator.setOperation('/'), showIcon: true, icon: CupertinoIcons.divide, text: '÷'),
       ],
     );
   }
@@ -234,39 +192,96 @@ class LineTwo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Row(
+    final calculator = Provider.of<CalculatorModel>(context);
+    return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        ButtonOperation(showIcon: false, icon: Icons.clear, text: '7'),
-        Padding(padding: EdgeInsets.only(right: 0)),
-        ButtonOperation(showIcon: false, icon: Icons.clear, text: '8'),
-        Padding(padding: EdgeInsets.only(right: 0)),
-        ButtonOperation(showIcon: false, icon: Icons.clear, text: '9'),
-        Padding(padding: EdgeInsets.only(right: 0)),
-        ButtonOperation(showIcon: true, icon: Icons.clear, text: 'AC'),
+        ButtonOperation(onPressed: () => calculator.inputDigit('7') ,showIcon: false, icon: Icons.clear, text: '7'),
+        const Padding(padding: EdgeInsets.only(right: 0)),
+        ButtonOperation(onPressed: () => calculator.inputDigit('8') ,showIcon: false, icon: Icons.clear, text: '8'),
+        const Padding(padding: EdgeInsets.only(right: 0)),
+        ButtonOperation(onPressed: () => calculator.inputDigit('9') ,showIcon: false, icon: Icons.clear, text: '9'),
+        const Padding(padding: EdgeInsets.only(right: 0)),
+        ButtonOperation(onPressed: () => calculator.setOperation('*'), showIcon: true, icon: Icons.clear, text: 'AC'),
       ],
     );
   }
 }
 
-class LineOne extends StatelessWidget {
-  const LineOne({
+class LineThree extends StatelessWidget {
+  const LineThree({
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
-    return const Row(
+    final calculator = Provider.of<CalculatorModel>(context);
+    return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        ButtonOperation(showIcon: false, icon: Icons.clear, text: 'AC'),
-        Padding(padding: EdgeInsets.only(right: 0)),
+        ButtonOperation(onPressed: () => calculator.inputDigit('4') ,showIcon: false, icon: Icons.clear, text: '4'),
+        const Padding(padding: EdgeInsets.only(right: 0)),
+        ButtonOperation(onPressed: () => calculator.inputDigit('5'), showIcon: false, icon: Icons.clear, text: '5'),
+        const Padding(padding: EdgeInsets.only(right: 0)),
+        ButtonOperation(onPressed: () => calculator.inputDigit('3'), showIcon: false, icon: Icons.clear, text: '6'),
+        const Padding(padding: EdgeInsets.only(right: 0)),
         ButtonOperation(
-            showIcon: true, icon: Icons.backspace_rounded, text: ''),
-        Padding(padding: EdgeInsets.only(right: 0)),
-        ButtonOperation(showIcon: true, icon: Icons.percent, text: ''),
-        Padding(padding: EdgeInsets.only(right: 0)),
-        ButtonOperation(showIcon: true, icon: CupertinoIcons.divide, text: '÷'),
+            onPressed: () => calculator.setOperation('-') ,
+            showIcon: false, icon: Icons.minimize_rounded, text: '-'),
+      ],
+    );
+  }
+}
+
+class LineFour extends StatelessWidget {
+  const LineFour({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final calculator = Provider.of<CalculatorModel>(context);
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        ButtonOperation(onPressed: () => calculator.inputDigit('1'), showIcon: false, icon: Icons.clear, text: '1'),
+        const Padding(padding: EdgeInsets.only(right: 0)),
+        ButtonOperation(onPressed: () => calculator.inputDigit('2'), showIcon: false, icon: Icons.clear, text: '2'),
+        const Padding(padding: EdgeInsets.only(right: 0)),
+        ButtonOperation(onPressed: () => calculator.inputDigit('3'), showIcon: false, icon: Icons.clear, text: '3'),
+        const Padding(padding: EdgeInsets.only(right: 0)),
+        ButtonOperation(onPressed: () => calculator.setOperation('+'), showIcon: true, icon: Icons.add, text: '+'),
+      ],
+    );
+  }
+}
+
+class LineFive extends StatelessWidget {
+  const LineFive({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final calculator = Provider.of<CalculatorModel>(context);
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        const ButtonOperation(showIcon: true, icon: Icons.history, text: '1'),
+        const Padding(padding: EdgeInsets.only(right: 0)),
+        ButtonOperation(onPressed: () => calculator.inputDigit('0'), showIcon: false, icon: Icons.clear, text: '0'),
+        const Padding(padding: EdgeInsets.only(right: 0)),
+        ButtonOperation(onPressed: () => calculator.inputDot(), showIcon: false, icon: Icons.clear, text: '.'),
+        const Padding(padding: EdgeInsets.only(right: 0)),
+        ButtonOperation(
+          onPressed: () => calculator.calculate(),
+          showIcon: false,
+          icon: CupertinoIcons.equal,
+          text: '=',
+          backColor: Colors.green,
+        ),
       ],
     );
   }

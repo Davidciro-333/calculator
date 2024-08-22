@@ -1,13 +1,16 @@
+import 'package:calculator/app/logic_operational/calculator_model.dart';
 import 'package:calculator/app/utils/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ButtonOperation extends StatelessWidget {
-  const ButtonOperation({super.key, required this.showIcon, required this.icon, required this.text, this.fontSizeButton, this.backColor});
+  const ButtonOperation({super.key, required this.showIcon, required this.icon, required this.text, this.fontSizeButton, this.backColor, this.onPressed});
   final bool showIcon;
   final IconData icon;
   final String text;
   final double? fontSizeButton;
   final Color? backColor;
+  final VoidCallback? onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +34,7 @@ class ButtonOperation extends StatelessWidget {
         ),
         highlightColor: Colors.blueGrey,
         alignment: Alignment.center,
-        onPressed: () {},
+        onPressed: onPressed,
         icon: showIcon ? Icon(
           icon,
           color: textColor,
